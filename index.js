@@ -6,7 +6,20 @@ const session = require("express-session");
 const nunjucks = require("nunjucks");
 const path = require("path");
 const WebSocket = require("./socket");
+const passport = require("passport");
+const passportConfig = require("./passport");
+const { sequelize } = require("./models");
+const initRouter = require("./routes");
 const app = express();
+passportConfig();
+sequelize
+  .sync({ force: false })
+  .then(() => {
+    console.log("db 연결됨");
+  })
+  .catch((e) => {
+    console.error(e);
+  });
 app.set("port", process.env.PORT || 3008);
 app.set("view engine", "html");
 nunjucks.configure("views", { express: app, watch: true });
@@ -23,9 +36,10 @@ app.use(
     cookie: { httpOnly: true, secure: false },
   })
 );
-app.use("/", (req, res) => {
-  return res.render("layout");
-});
+app.use(passport.initialize());
+app.use(passport.session());
+app.use("/", initRouter);
+
 app.use((req, res, next) => {
   const error = new Error(`${req.method}${req.url} 라우터가 없습니다.`);
   error.status = 404;
@@ -40,4 +54,4 @@ app.use((err, req, res, next) => {
 const server = app.listen(app.get("port"), () => {
   console.log(`${app.get("port")}번 포트에서 서버 대기 중`);
 });
-WebSocket(server);
+WebSocket(server, app);

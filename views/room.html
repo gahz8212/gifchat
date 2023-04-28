@@ -1,0 +1,22 @@
+{% extends 'layout.html'%}
+{% block content%}
+<div class="timeline">
+  <form action="/room" method="post" id="room-create">
+    <div class="left">
+      <div class="input-group">
+        <label for="title">방 제목</label><input type="text" name="title" id="title" placeholder="방 제목 입력">
+      </div>
+      <div class="input-group">
+        <label for="max">최대인원</label><input type="number" name="max" id="max" value="2" min='2' max='10'>
+      </div>
+      <div class="input-group">
+        <label for="password">비밀번호</label><input type="text" name="password" placeholder="빈칸이면 공개">
+      </div>
+    </div>
+    <div class="right"><button>생성</button></div>
+  </form>
+</div>
+{% endblock%}
+{% block script%}
+
+{% endblock%}

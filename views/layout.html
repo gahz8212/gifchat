@@ -6,19 +6,15 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="/socket.io/socket.io.js"></script>
-  <script>
-    const socket = io.connect('http://localhost:3008', { path: '/socket.io' })
-    socket.on('news', (event) => {
-      console.log(event)
-      socket.emit('reply', 'hello Node')
-    })
-  </script>
-  <title>Document</title>
+  <link href="https://cdn.jsdelivr.net/npm/reset-css@5.0.1/reset.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/gifchat.css">
+  <title>{{title}}</title>
 </head>
 
 <body>
-  {% block content%}
-  {% endblock%}
+  <div class="container">
+    {% block content%}
+    {% endblock%}</div>
   {% block script%}
   {% endblock%}
 </body>

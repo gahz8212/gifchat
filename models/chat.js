@@ -19,8 +19,8 @@ module.exports = class Chat extends Sequelize.Model {
         timestamps: false,
         underscored: false,
         paranoid: false,
-        charset: "utf8mb",
-        collate: "utf8mb_general_ci",
+        charset: "utf8mb4",
+        collate: "utf8mb4_general_ci",
       }
     );
   }

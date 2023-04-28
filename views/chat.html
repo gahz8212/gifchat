@@ -1,0 +1,59 @@
+{% extends 'layout.html'%}
+{% block content%}
+{% endblock%}
+{% block script%}
+<h1>{{title}}</h1>
+<a href="/" id="exit-btn">방 나가기</a>
+<div id="chat-list">
+  {% for chat in chats%}
+  {% if chat.user===user%}
+  <div class="mine">
+    <div>{{chat.user}}</div>
+    {% if chat.gif%}
+    <img src="/gif/{{chat.gif}}" alt="gif">
+    {% else%}
+    <div>{{chat.chat}}</div>
+    {% endif%}
+  </div>
+  {% elif chat.user==='system'%}
+  <div class="system">
+    <div>{{chat.chat}}</div>
+  </div>
+  {% else%}
+  <div class="other">
+    <div>{{chat.user}}</div>
+    {% if chat.gif%}
+    <img src="/gif/{{chat.gif}}" alt="gif">
+    {% else%}
+    <div>{{chat.chat}}</div>
+    {% endif%}
+  </div>
+  {% endif%}
+  {% endfor%}
+</div>
+<form action="/chat" method="post" id="chat-form" enctype="multipart/form-data">
+  <label for="gif">올리기</label><input type="file" name="" id="gif" accept="image/gif">
+  <input type="text" name="chat" id="chat">
+  <button type="submit">전송</button>
+</form>
+<script>
+  const socket = io.connect('http://localhost:3008/chat', { path: '/socket.io' });
+
+  socket.on('join', function (data) {
+    const div = document.createElement('div')
+    div.classList.add('system')
+    const chat = document.createElement('div')
+    chat.textContent = data.chat;
+    div.appendChild(chat)
+    document.querySelector('#chat-list').appendChild(div)
+  })
+  socket.on('exit', function (data) {
+    const div = document.createElement('div')
+    div.classList.add('system')
+    const chat = document.createElement('div')
+    chat.textContent = data.chat
+    div.appendChild(chat)
+    document.querySelector('#chat-list').appendChild(div)
+  })
+</script>
+{% endblock%}
